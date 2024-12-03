@@ -30,8 +30,8 @@ jobs:
               run: |
                 sudo apt install zip
                 mkdir dist
-                zip -r marketing-lambda.zip .
-                mv marketing-lambda.zip ./dist
+                zip -r marketing_lambda.zip .
+                mv marketing_lambda.zip ./dist
 
             - name: Upload zip to S3
               working-directory: ./lambdas/marketing

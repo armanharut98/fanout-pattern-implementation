@@ -30,8 +30,8 @@ jobs:
               run: |
                 sudo apt install zip
                 mkdir dist
-                zip -r inventory-lambda.zip .
-                mv inventory-lambda.zip ./dist
+                zip -r inventory_lambda.zip .
+                mv inventory_lambda.zip ./dist
 
             - name: Upload zip to S3
               working-directory: ./lambdas/inventory
