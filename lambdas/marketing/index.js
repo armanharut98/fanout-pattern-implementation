@@ -1,5 +1,6 @@
 exports.handler = async (event) => {
     console.log("Marketing Lambda triggered!")
-    console.log(`Message: ${JSON.stringify(event)}`)
+    const message = event.records[0].body.message
+    console.log(`Message: ${message}`)
     return event
 }

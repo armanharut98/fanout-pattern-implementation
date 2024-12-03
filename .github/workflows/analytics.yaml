@@ -30,7 +30,8 @@ jobs:
               run: |
                 sudo apt install zip
                 mkdir dist
-                zip -r dist/analytics-lambda.zip .
+                zip -r analytics-lambda.zip .
+                mv analytics-lambda.zip ./dist
 
             - name: Upload zip to S3
               working-directory: ./lambdas/analytics
