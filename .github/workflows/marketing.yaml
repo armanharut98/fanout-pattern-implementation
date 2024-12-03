@@ -1,0 +1,44 @@
+name: Marketing Lambda Build and Deploy
+
+on:
+    push:
+        branches:
+            - "main"
+        paths:
+            - ".github/workflows/marketing.yaml"
+            - "lambdas/marketing/**"
+        
+jobs:
+    build-and-deploy:
+        runs-on: ubuntu-latest
+        permissions:
+            id-token: write
+            contents: read
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v3
+
+            - name: Configure AWS credentials
+              uses: aws-actions/configure-aws-credentials@v3
+              with:
+                role-to-assume: arn:aws:iam::${{ secrets.AWS_ACCOUNT_ID }}:role/${{ secrets.AWS_ROLE_TO_ASSUME }}
+                aws-region: ${{ vars.AWS_REGION }}
+                role-session-name: GithubActionsECRPushSession
+
+            - name: Create zip archive
+              working-directory: ./lambdas/marketing
+              run: |
+                sudo apt install zip
+                mkdir dist
+                zip -r dist/marketing-lambda.zip .
+
+            - name: Upload zip to S3
+              working-directory: ./lambdas/marketing
+              run: |
+                aws s3 sync ./dist/ s3://${{ vars.LAMBDA_BUCKET_NAME }}/lambdas
+
+            - name: Update Lambda function
+              run: |
+                aws lambda update-function-code --function-name  marketing_lambda --s3-bucket ${{ vars.LAMBDA_BUCKET_NAME }} --s3-key lambdas/marketing_lambda.zip
+
+        
