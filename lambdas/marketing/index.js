@@ -1,5 +1,5 @@
 exports.handler = async (event) => {
     console.log("Marketing Lambda triggered!")
-    console.log(event)
+    console.log(event.body)
     return event
 }
